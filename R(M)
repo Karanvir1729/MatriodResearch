@@ -1,0 +1,62 @@
+from sage.combinat.permutation import Permutations
+
+
+def calculate_pi(sigma, k, M):
+    n = len(M.bases())
+
+    return M.corank([sigma(i) - 1 for i in range(1, k + 1)]) * M.rank([sigma(i) - 1 for i in range(1, k + 1)])
+
+
+def calculate_R(M):
+    ground_set = M.groundset()
+    n = len(ground_set)
+    symmetric_group = Permutations(n)
+    R_M = 0
+    for sigma in symmetric_group:
+        product_term = 1
+        for k in range(1, n):
+            pi_M_k_sigma = calculate_pi(sigma, k, M)
+            product_term *= pi_M_k_sigma
+            # print(product_term)
+            if product_term == 0:
+                return 'Zero-Division Error'
+        R_M += 1 / product_term
+    return R_M
+    return R_M * karan_magic(n)
+
+
+def polar_volume(M, k):
+    lst = (1 for i in range(k + 1))
+    one = Polyhedron(ieqs=[lst])
+    one_perp = one.affine_hull_projection(orthogonal=True)
+    polar_polytope = M.matroid_polytope().translation([-0 / 2] * k).polar(in_affine_span=True)
+    intersect = polar_polytope.intersection(one_perp)
+    return polar_polytope.volume(measure='induced_rational')
+
+
+def uniform_hepp(n, r):
+    l = n - r
+    q = (r - 1)
+    result = math.factorial(n)
+    result /= math.factorial(q)
+    result /= math.factorial(l)
+    result *= (l / r) ** (l)
+    return result
+
+
+def karan_magic(n):
+    return n ** (n - 2) / math.factorial(n - 1)
+
+
+k = 8
+for i in range(1, k):
+    pass
+    # print(f"$U{i}_{k}$ & {float(polar_volume(matroids.Uniform(i, k),k))} & {float(calculate_R(matroids.Uniform(i, k)))} & {polar_volume(matroids.Uniform(i, k),k)/calculate_R(matroids.Uniform(i, k))} \\\ \hline")
+
+k4 = [[0, 1, 2], [0, 1, 4], [0, 1, 5], [0, 2, 3], [0, 2, 5], [0, 3, 4], [0, 3, 5], [0, 4, 5], [1, 2, 3], [1, 2, 4],
+      [1, 3, 4], [1, 3, 5], [1, 4, 5], [2, 3, 4], [2, 3, 5], [2, 4, 5]]
+M = Matroid([0, 1, 2, 3, 4, 5], k4)
+M = matroids.Whirl(3)
+M = matroids.named_matroids.Q6()
+M = matroids.named_matroids.P6()
+print(f"$W^3$ & float(polar_volume(M,3)) & {float(calculate_R(M))} & polar_volume(M,3)/calculate_R(M) \\\ \hline")
