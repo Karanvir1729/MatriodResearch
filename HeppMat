@@ -1,0 +1,34 @@
+from itertools import permutations
+
+def superficial_degree_of_convergence(matroid, subset, d, weights):
+    superficial_degree = 0
+    n = len(matroid.groundset())
+    crk = len(subset) - matroid.rank(subset)
+    for e in subset:
+        superficial_degree += weights[e] - (0.5 * d * crk)
+       
+    return superficial_degree
+
+def hepp_bound(matroid, weights):
+    n = len(matroid.groundset())
+    h = 0
+    crk = len(matroid.groundset()) - matroid.rank()
+    if crk < 1: 
+        d = 0
+        return 0
+    else:     
+        d = 2 * sum([i for i in weights.values()])/ crk
+    for subset in permutations(matroid.groundset(), n): 
+        denom = 1
+        for i in range(1, n):
+            denom *= superficial_degree_of_convergence(matroid, list(subset[:i]), d, weights)
+        h += Rational(1/denom)
+    return h
+# Example usage
+ground_set = [1, 2, 3]
+
+# Define the independent sets
+independent_sets = [[1,2], [1,3], [2,3]]
+# Create the matroid
+M = Matroid(ground_set, independent_sets)
+print(hepp_bound(M, {1:1,2:1,3:1}))
