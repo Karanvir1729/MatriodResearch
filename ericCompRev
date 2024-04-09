@@ -24,9 +24,33 @@ def hepp_bound(matroid, weights):
             denom *= superficial_degree_of_convergence(matroid, list(subset[:i]), d, weights)
         h += Rational(1/denom)
     return h
-# Example usage
 
 
+def kirchhoff_polynomial(ground_set, basis):
+      
+    variables = ['x' + str(i) for i in range(1, len(ground_set) + 1)]
+    R = PolynomialRing(QQ, variables)
+    K = 0
+    
+    for base in basis:
+        curr = R.one()
+        for element in ground_set:
+            if element not in base:
+                index = element
+                x_i = R.gen(index)
+                curr *= x_i
+        K += curr
+    
+    return K
+
+
+#########Topical polynomial 
+ground_set = [0, 1, 2, 3, 4]
+combs = combinations(ground_set, 3)
+independent_sets = [[c[i] for i in range(3)] for c in combs]
+print(kirchhoff_polynomial(ground_set, independent_sets))
+
+###################################### Hepp bound
 
 ground_set = [1, 2, 3,4,5]
 combs = combinations(ground_set, 3)
