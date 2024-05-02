@@ -1,0 +1,16 @@
+#P1 = convex_hull([0 0;1,0]) #Newton polytope of f1 2
+P1 = Polyhedron(vertices = [[0,0], [1,0]])
+#P2 = convex_hull([ 0 0;1 0;0 1]) #Newton polytope of f2 3
+P2 = Polyhedron(vertices = [[0,0], [1,0], [0,1]])
+#P3 = convex_hull([1 0;0 1]) #Newton polytope of f3 4
+P3 = Polyhedron(vertices = [[0,1], [1,0]])
+P = P1+P2+P3
+Minus1 = Polyhedron(vertices = [[-1,-1]])
+P += Minus1
+#DP = polarize(P+[-1,-1]) #dual polytope of P-ν 1
+DP = P.polar()
+#Println(vertices(DP)) #print the vertices 2
+for q in DP.Vrepresentation():
+    print(q)
+#factorial(2)*volume(DP) 
+print(DP.volume() * factorial(2))
