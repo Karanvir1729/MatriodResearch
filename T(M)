@@ -1,0 +1,40 @@
+from sage.combinat.permutation import Permutations
+
+
+def calculate_rank(sigma, k, M):
+    return M.rank([sigma(i) - 1 for i in range(1, k + 1)])
+
+
+def calculate_T(M):
+    ground_set = M.groundset()
+    n = len(ground_set)
+    symmetric_group = Permutations(n)
+    R_M = 0
+    for sigma in symmetric_group:
+        product_term = 1
+        for k in range(1, n + 1):
+            pi_M_k_sigma = calculate_rank(sigma, k, M)
+            product_term *= pi_M_k_sigma
+            # print(product_term)
+            #if product_term == 0:
+                #return 'Zero-Division Error'
+        R_M += 1 / product_term
+    return R_M
+    return R_M * Constant(n)
+
+
+
+def uniform_T(n, r):
+    l = n - r
+    result = math.factorial(n)
+    result /= (math.factorial(r) * r**(l))
+    return result
+print(float(uniform_T(8,5)))
+
+def constant(n):
+    return 1
+
+k = 8
+for i in range(1, k):
+    
+    print(f"$U{i}_{k}$ & {float(calculate_T(matroids.Uniform(i, k)))} \\\ \hline")
