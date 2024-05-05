@@ -5,9 +5,9 @@ def superficial_degree_of_convergence(matroid, subset, d, weights):
     n = len(matroid.groundset())
     crk = len(subset) - matroid.rank(subset)
     for e in subset:
-        superficial_degree += weights[e] - (0.5 * d * crk)
+        superficial_degree += weights[e] 
        
-    return superficial_degree
+    return superficial_degree - (0.5 * d * crk)
 
 def hepp_bound(matroid, weights):
     n = len(matroid.groundset())
@@ -32,3 +32,8 @@ independent_sets = [[1,2], [1,3], [2,3]]
 # Create the matroid
 M = Matroid(ground_set, independent_sets)
 print(hepp_bound(M, {1:1,2:1,3:1}))
+k4 = [[0, 1, 2], [0, 1, 4], [0, 1, 5], [0, 2, 3], [0, 2, 5], [0, 3, 4], [0, 3, 5], [0, 4, 5], [1, 2, 3], [1, 2, 4],
+      [1, 3, 4], [1, 3, 5], [1, 4, 5], [2, 3, 4], [2, 3, 5], [2, 4, 5]]
+ground_set = [0,1, 2, 3,4,5]
+M = Matroid(ground_set, k4)
+print(hepp_bound(M, {0:1, 1:1,2:1,3:1, 4:1, 5:1}))
