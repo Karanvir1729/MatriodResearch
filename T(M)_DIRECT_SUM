@@ -1,0 +1,49 @@
+from sage.combinat.permutation import Permutations
+
+
+def calculate_rank(sigma, k, M):
+    return M.rank([sigma[i] for i in range(0, k)])
+
+
+def calculate_T(M):
+    ground_set = list(M.groundset())
+    n = len(ground_set)
+    symmetric_group = list(Permutations(ground_set))
+    print(list(symmetric_group))
+    R_M = 0
+    for sigma in symmetric_group:
+        product_term = 1
+        for k in range(1, n + 1):
+            pi_M_k_sigma = calculate_rank(sigma, k, M)
+            product_term *= pi_M_k_sigma
+            # print(product_term)
+            #if product_term == 0:
+                #return 'Zero-Division Error'
+        R_M += 1 / product_term
+    return R_M
+    return R_M * Constant(n)
+
+
+
+def uniform_T(r, n):
+    l = n - r
+    result = math.factorial(n)
+    result /= (math.factorial(r) * r**(l))
+    return result
+#print(float(uniform_T(5,8))) #Sanity check
+
+def constant(n):
+    return 1
+
+print(f'twoThree {calculate_T(matroids.Uniform(2, 3))}')
+print(f'oneFour {calculate_T(matroids.Uniform(1, 4))}')
+
+M = matroids.Uniform(2,3).direct_sum(matroids.Uniform(1,4))
+print(M.groundset()) #Sanity check
+print([i for i in M.bases()])
+print(M.rank([(0, 2), (1, 2)]))
+print(uniform_T(2,3)) #Matches
+print(uniform_T(1,4)) #Matches
+print(M.is_valid()) #Matches 
+
+print(calculate_T(M))
