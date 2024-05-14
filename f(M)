@@ -27,5 +27,45 @@ def adder(L):
             out[i] += l[i]
     return out
 
+
+
+def generate_shuffles(list1, list2, prefix=None):
+    if prefix is None:
+        prefix = []
+
+    # Base case: if both lists are empty, return the prefix
+    if not list1 and not list2:
+        return [prefix]
+
+    # Recursive case: generate shuffles by appending elements from list1 and list2
+    shuffles = []
+    if list1:
+        shuffles += generate_shuffles(list1[1:], list2, prefix + [list1[0]])
+    if list2:
+        shuffles += generate_shuffles(list1, list2[1:], prefix + [list2[0]])
+
+    return shuffles
+
+def new_claim(A, B):
+    s1 = s(A)
+    s2 = s(B) 
+    m = len(A.groundset())
+    n = len(B.groundset())
+    out = [0]*(m+n)
+    for i in s1:
+        for j in s2: 
+            out = adder([out, adder(generate_shuffles(i, j))])
+    return out
+            
+
+#print(adder(generate_shuffles(adder(s(M)), adder(s(R)))))
+#print((generate_shuffles(adder(s(M)), adder(s(R)))))
+#print(adder(generate_shuffles([1], [1,1,0])))
+print(new_claim(M,R))
 print(adder(s(N)))
-print(len(s(N)))
+#print(len(s(N)))
+#print(adder(s(M)))
+#print(adder(s(R)))
+
+
+
