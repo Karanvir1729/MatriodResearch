@@ -4,7 +4,7 @@ k4 = [[0, 1, 2], [0, 1, 4], [0, 1, 5], [0, 2, 3], [0, 2, 5], [0, 3, 4], [0, 3, 5
 ground_set = [0,1, 2, 3,4,5]
 #M = Matroid(ground_set, k4)
 M = matroids.Uniform(2,3)
-R= matroids.Uniform(2,4)
+R= matroids.Uniform(1,2)
 N = R.direct_sum(M)
 len(R.bases())
 
@@ -86,9 +86,15 @@ def mould_claim(A, B):
     n = len(B.groundset())
     out = [0]*(m+n)
     for i in s1:
+        inner_sum = [0]*(n)
         for j in s2: 
-            out = adder([out, adder(generate_shuffles(i, j))])
+            inner_sum = adder([inner_sum, j])
+        out = adder([out, adder(generate_shuffles(i, inner_sum))])
     return h(out)
 
 print(h(adder(s(N))))
 print(mould_claim(M,R))
+
+
+
+
