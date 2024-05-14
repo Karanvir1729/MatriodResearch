@@ -1,0 +1,31 @@
+from sage.combinat.permutation import Permutations
+M = matroids.Uniform(2,3)
+R= matroids.Uniform(2,4)
+N = R.direct_sum(M)
+len(R.bases())
+
+def s(M): 
+    ground_set = M.groundset()
+    n = len(ground_set)
+    symmetric_group = list(Permutations(ground_set))
+    final = []
+    for sigma in symmetric_group:
+        out = [0]*n
+        s = []
+        for k in range(0, n):
+            ss = s.copy()
+            ss.append(sigma[k])
+            out[k] = M.rank(ss) - M.rank(s) 
+            s.append(sigma[k])
+        final.append(out)
+    return final
+
+def adder(L):
+    out = [0]*len(L[0])
+    for l in L: 
+        for i in range(len(l)): 
+            out[i] += l[i]
+    return out
+
+print(adder(s(N)))
+print(len(s(N)))
