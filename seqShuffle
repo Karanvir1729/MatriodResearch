@@ -1,0 +1,42 @@
+def rank_jump_sequence(k, m):
+    # Generates the sequence with k ones followed by m-k zeros
+    return [1]*k + [0]*(m-k)
+
+def all_shuffles(s, t):
+    if not s:
+        return [t]
+    if not t:
+        return [s]
+    return [[s[0]] + rest for rest in all_shuffles(s[1:], t)] + [[t[0]] + rest for rest in all_shuffles(s, t[1:])]
+
+def count_shuffles(shuffles):
+    # Count occurrences of each unique shuffle
+    shuffle_dict = {}
+    for shuffle in shuffles:
+        tuple_version = tuple(shuffle)  # Lists can't be dictionary keys, so convert to tuple
+        if tuple_version in shuffle_dict:
+            shuffle_dict[tuple_version] += 1
+        else:
+            shuffle_dict[tuple_version] = 1
+    return shuffle_dict
+
+def print_shuffles_and_counts(shuffles):
+    shuffle_dict = count_shuffles(shuffles)
+    print("Shuffle counts:")
+    for shuffle, count in shuffle_dict.items():
+        print(f"{list(shuffle)}: {count}")
+
+def verify_lemma(k, m, ell, n):
+    s = rank_jump_sequence(k, m)
+    t = rank_jump_sequence(ell, n)
+    
+    shuffles = all_shuffles(s, t)
+    
+    #print("Generated shuffles:")
+    #for shuffle in shuffles:
+        #print(shuffle)
+    
+    print_shuffles_and_counts(shuffles)
+
+# Example usage
+verify_lemma(2, 4, 3,4)  # Adjust the parameters to test different scenarios
