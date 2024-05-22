@@ -1,0 +1,55 @@
+from math import comb as binomial
+
+def rank_jump_sequence(k, m):
+    # Generates the sequence with k ones followed by m-k zeros
+    return [1]*k + [0]*(m-k)
+
+def all_shuffles(s, t):
+    if not s:
+        return [t]
+    if not t:
+        return [s]
+    return [[s[0]] + rest for rest in all_shuffles(s[1:], t)] + [[t[0]] + rest for rest in all_shuffles(s, t[1:])]
+
+def count_shuffles(shuffles):
+    # Count occurrences of each unique shuffle
+    shuffle_dict = {}
+    for shuffle in shuffles:
+        tuple_version = tuple(shuffle)  # Lists can't be dictionary keys, so convert to tuple
+        if tuple_version in shuffle_dict:
+            shuffle_dict[tuple_version] += 1
+        else:
+            shuffle_dict[tuple_version] = 1
+    return shuffle_dict
+
+def shuffle_to_binary(shuffle):
+    # Convert a shuffle to a binary number
+    binary_string = ''.join(map(str, shuffle))
+    return int(binary_string, 2)
+
+def print_shuffles_and_counts(shuffles):
+    shuffle_dict = count_shuffles(shuffles)
+    print("Shuffle counts and their binary/decimal representations:")
+    for shuffle, count in shuffle_dict.items():
+        binary_representation = shuffle_to_binary(shuffle)
+        print(f"{list(shuffle)}: {count}, Binary: {bin(binary_representation)}, Decimal: {binary_representation}")
+
+def verify_lemma(k, m, ell, n):
+    s = rank_jump_sequence(k, m)
+    t = rank_jump_sequence(ell, n)
+    
+    shuffles = all_shuffles(s, t)
+    
+    print_shuffles_and_counts(shuffles)
+    
+    target_shuffle = [1] * (k + ell) + [0] * (m - k + n - ell)
+    actual_count = count_shuffles(shuffles).get(tuple(target_shuffle), 0)
+    
+    theoretical_count = binomial(k + ell, ell) * binomial(m - k + n - ell, n - ell)
+    
+    print(f"Theoretical count: {theoretical_count}")
+    print(f"Actual count: {actual_count}")
+    print(f"LEMMA {'HOLDS' if theoretical_count == actual_count else 'FAILS'}")
+
+# Example usage
+verify_lemma(1, 2, 3, 4)  # Adjust the parameters to test different scenarios
