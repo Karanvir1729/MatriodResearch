@@ -1,0 +1,15 @@
+P1 = Polyhedron(vertices=[
+    [1, 1, 0, 1, 0],
+    [1, 1, 0, 0, 1],
+    [1, 0, 1, 1, 0],
+    [1, 0, 1, 0, 1],
+    [1, 0, 0, 1, 1],
+    [0, 1, 1, 1, 0],
+    [0, 1, 1, 0, 1],
+    [1, 0, 1, 0, 1]
+])
+vertices = [list(vertex) for vertex in P1.vertices()]
+vector = [3/5,3/5,3/5,3/5,3/5]
+translation_vector = [-c for c in vector]
+P1_translated = P1.translation(translation_vector)
+P1_translated.contains([0,0,0,0,0])
